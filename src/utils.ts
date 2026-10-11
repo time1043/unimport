@@ -1,4 +1,8 @@
-import type { Import } from './types'
+import type { Import, Preset } from './types'
+
+export function defineUnimportPreset (preset: Preset): Preset {
+  return preset
+}
 
 export function toImports (imports: Import[], isCJS = false) {
   const map = toImportModuleMap(imports)

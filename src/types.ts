@@ -19,3 +19,9 @@ export interface Import extends ImportCommon {
   /** Import as this name */
   as?: ImportName
 }
+
+export type PresetImport = ImportName | [name: ImportName, as?: ImportName, from?: ModuleId] | Exclude<Import, 'from'>
+
+export interface Preset extends ImportCommon {
+  imports: (PresetImport | Preset)[]
+}
