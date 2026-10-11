@@ -1,3 +1,5 @@
+import type { BuiltinPresetName } from './presets'
+
 export type ModuleId = string
 export type ImportName = string
 
@@ -24,4 +26,25 @@ export type PresetImport = ImportName | [name: ImportName, as?: ImportName, from
 
 export interface Preset extends ImportCommon {
   imports: (PresetImport | Preset)[]
+}
+
+export interface UnimportOptions {
+  imports: Import[]
+  presets: (Preset | BuiltinPresetName)[]
+  warn: (msg: string) => void
+}
+
+export type PathFromResolver = (_import: Import) => string | undefined
+
+export interface TypeDeclrationOptions {
+  /**
+   * Custom resolver for path of the import
+   */
+  resolvePath?: PathFromResolver
+  /**
+   * Append `export {}` to the end of the file
+   *
+   * @default true
+   */
+  exportHelper?: boolean
 }

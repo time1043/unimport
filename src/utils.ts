@@ -1,9 +1,39 @@
 import MagicString from 'magic-string'
 import { findStaticImports, parseStaticImport, StaticImport } from 'mlly'
-import type { Import, Preset } from './types'
+import type { Import, Preset, TypeDeclrationOptions } from './types'
+
+export const excludeRE = [
+  // imported from other module
+  /\bimport\s*([\s\S]+?)\s*from\b/g,
+  // defined as function
+  /\bfunction\s*([\w_$]+?)\s*\(/g,
+  // defined as local variable
+  /\b(?:const|let|var)\s+?(\[[\s\S]*?\]|\{[\s\S]*?\}|[\s\S]+?)\s*?[=;\n]/g
+]
+
+export const importAsRE = /^.*\sas\s+/
+export const separatorRE = /[,[\]{}\n]/g
+const regexRE = /\/.*?(?<!\\)\/[gimsuy]*/g
+const multilineCommentsRE = /\/\*\s(.|[\r\n])*?\*\//gm
+const singlelineCommentsRE = /\/\/\s.*$/gm
+const templateLiteralRE = /\$\{(.*)\}/g
+const quotesRE = [
+  /(["'])((?:\\\1|(?!\1)|.|\r)*?)\1/gm,
+  /([`])((?:\\\1|(?!\1)|.|\n|\r)*?)\1/gm
+]
 
 export function defineUnimportPreset (preset: Preset): Preset {
   return preset
+}
+
+export function stripCommentsAndStrings (code: string) {
+  return code
+    .replace(multilineCommentsRE, '')
+    .replace(singlelineCommentsRE, '')
+    .replace(templateLiteralRE, '` + $1 + `')
+    .replace(quotesRE[0], '""')
+    .replace(quotesRE[1], '``')
+    .replace(regexRE, 'new RegExp("")')
 }
 
 export function toImports (imports: Import[], isCJS = false) {
@@ -94,6 +124,27 @@ export function toExports (imports: Import[]) {
     .join('\n')
 }
 
+export function toTypeDeclrationItems (imports: Import[], options?: TypeDeclrationOptions) {
+  return imports
+    .map((i) => {
+      const from = options?.resolvePath?.(i) || i.from
+      return `const ${i.as}: typeof import('${from}')${i.name !== '*' ? `['${i.name}']` : ''}`
+    })
+}
+
+export function toTypeDeclrationFile (imports: Import[], options?: TypeDeclrationOptions) {
+  const items = toTypeDeclrationItems(imports, options)
+  const {
+    exportHelper = true
+  } = options || {}
+
+  let declration = 'declare global {\n' + items.map(i => '  ' + i).join('\n') + '\n}'
+  if (exportHelper) {
+    declration += '\nexport {}'
+  }
+  return declration
+}
+
 function stringifyImportAlias (item: Import, isCJS = false) {
   return (item.as === undefined || item.name === item.as)
     ? item.name
@@ -149,4 +200,11 @@ export function addImportToCode (code: string, imports: Import[], isCJS = false,
     s,
     code: s.toString()
   }
+}
+
+export function normalizeImports (imports: Import[]): Import[] {
+  for (const _import of imports) {
+    _import.as = _import.as || _import.name
+  }
+  return imports
 }
