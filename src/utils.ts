@@ -40,6 +40,27 @@ export function toImports (imports: Import[], isCJS = false) {
     .join('\n')
 }
 
+export function toExports (imports: Import[]) {
+  const map = toImportModuleMap(imports)
+  return Object.entries(map)
+    .flatMap(([name, imports]) => {
+      name = name.replace(/\.[a-z]+$/, '')
+      const entries: string[] = []
+      const filtered = Array.from(imports).filter((i) => {
+        if (i.name === '*') {
+          entries.push(`export * as ${i.as} from '${name}';`)
+          return false
+        }
+        return true
+      })
+      if (filtered.length) {
+        entries.push(`export { ${filtered.map(i => stringifyImportAlias(i, false)).join(', ')} } from '${name}';`)
+      }
+      return entries
+    })
+    .join('\n')
+}
+
 function stringifyImportAlias (item: Import, isCJS = false) {
   return (item.as === undefined || item.name === item.as)
     ? item.name
