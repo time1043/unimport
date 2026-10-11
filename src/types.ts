@@ -36,6 +36,10 @@ export interface UnimportOptions {
 
 export type PathFromResolver = (_import: Import) => string | undefined
 
+export interface ScanDirExportsOptions {
+  fileFilter?: (file: string) => boolean
+}
+
 export interface TypeDeclrationOptions {
   /**
    * Custom resolver for path of the import
