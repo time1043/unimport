@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "esnext"],
+    "types": ["vite/client", "node"]
+  },
+  "include": ["src"],
+  "exclude": ["test/fixtures/**"]
+}
