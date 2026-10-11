@@ -2,8 +2,29 @@
   "name": "unimport",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./unplugin": {
+      "import": "./dist/unplugin.mjs",
+      "require": "./dist/unplugin.cjs",
+      "types": "./dist/unplugin.d.ts"
+    },
+    "./*": "./*"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
   "scripts": {
+    "build": "unbuild",
     "lint": "eslint --ext .ts,.js,.mjs,.cjs .",
     "dev": "vitest dev",
     "test": "vitest run --coverage"
