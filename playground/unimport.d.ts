@@ -48,6 +48,7 @@ declare global {
   const useCssVars: typeof import('vue')['useCssVars']
   const multiplier: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index')['multiplier']
   const useDoubled: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index')['useDoubled']
+  const bump: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index')['bump']
 }
 // for vue template auto import
 declare module 'vue' {
@@ -101,6 +102,7 @@ declare module 'vue' {
     readonly useCssVars: typeof import('vue')['useCssVars']
     readonly multiplier: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index')['multiplier']
     readonly useDoubled: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index')['useDoubled']
+    readonly bump: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index')['bump']
   }
 }
 export {}
