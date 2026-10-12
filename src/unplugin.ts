@@ -5,6 +5,7 @@ import { createUnplugin } from 'unplugin'
 import { createUnimport } from './context'
 import { scanDirExports } from './scan'
 import { UnimportOptions } from './types'
+import { vueTemplateAutoImport } from './vue-sfc'
 
 export interface UnimportPluginOptions extends UnimportOptions {
   include: FilterPattern
@@ -28,7 +29,11 @@ export default createUnplugin<Partial<UnimportPluginOptions>>((options) => {
     transformInclude (id) {
       return filter(id)
     },
-    async transform (_code) {
+    async transform (_code, id) {
+      if (id.endsWith('.vue')) {
+        _code = vueTemplateAutoImport(_code, ctx)
+      }
+
       const { code, s } = await ctx.injectImports(_code)
       if (code === _code) {
         return
