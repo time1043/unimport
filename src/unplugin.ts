@@ -1,9 +1,10 @@
 import { promises as fs } from 'fs'
-import { createUnplugin } from 'unplugin'
 import type { FilterPattern } from '@rollup/pluginutils'
 import { createFilter } from '@rollup/pluginutils'
-import { UnimportOptions } from './types'
+import { createUnplugin } from 'unplugin'
 import { createUnimport } from './context'
+import { scanDirExports } from './scan'
+import { UnimportOptions } from './types'
 
 export interface UnimportPluginOptions extends UnimportOptions {
   include: FilterPattern
@@ -36,7 +37,15 @@ export default createUnplugin<Partial<UnimportPluginOptions>>((options) => {
         map: s.generateMap()
       }
     },
-    buildStart () {
+    async buildStart () {
+      const dirImports = await scanDirExports('./src/composables', { fileFilter: filter })
+      // console.log({ dirImports })
+
+      // eslint-disable-next-line require-await
+      await ctx.modifyDynamicImports(async (imports) => {
+        imports.push(...dirImports)
+      })
+
       if (dts) {
         return fs.writeFile(dts, ctx.generateTypeDecarations(), 'utf-8')
       }
