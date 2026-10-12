@@ -12,6 +12,7 @@ const double = useDoubled(count);
   <div>
     <h1>{{ count }} x {{ multiplier }} = {{ double }}</h1>
     <button @click="inc">Increment</button>
+    <button @click="multiplier.value++">x{{ multiplier }}</button>
   </div>
 </template>
 
