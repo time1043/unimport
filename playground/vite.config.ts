@@ -15,6 +15,9 @@ export default defineConfig({
       dts: true,
       presets: [
         'vue'
+      ],
+      dirs: [
+        'src/composables'
       ]
     })
   ],

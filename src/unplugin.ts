@@ -10,6 +10,7 @@ export interface UnimportPluginOptions extends UnimportOptions {
   include: FilterPattern
   exclude: FilterPattern
   dts: boolean | string
+  dirs: string[]
 }
 
 export default createUnplugin<Partial<UnimportPluginOptions>>((options) => {
@@ -38,13 +39,11 @@ export default createUnplugin<Partial<UnimportPluginOptions>>((options) => {
       }
     },
     async buildStart () {
-      const dirImports = await scanDirExports('./src/composables', { fileFilter: filter })
-      // console.log({ dirImports })
-
-      // eslint-disable-next-line require-await
-      await ctx.modifyDynamicImports(async (imports) => {
-        imports.push(...dirImports)
-      })
+      if (options.dirs?.length) {
+        await ctx.modifyDynamicImports(async (imports) => {
+          imports.push(...await scanDirExports(options.dirs))
+        })
+      }
 
       if (dts) {
         return fs.writeFile(dts, ctx.generateTypeDecarations(), 'utf-8')
