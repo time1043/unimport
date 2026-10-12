@@ -139,6 +139,12 @@ export function toTypeDeclrationFile (imports: Import[], options?: TypeDeclratio
   } = options || {}
 
   let declration = 'declare global {\n' + items.map(i => '  ' + i).join('\n') + '\n}'
+
+  // for vue template auto import
+  declration += '\n// for vue template auto import\ndeclare module \'vue\' {\n  interface ComponentCustomProperties {\n' +
+    items.map(i => '    ' + i.replace(/^const\s+/, 'readonly ')).join('\n') +
+    '\n  }\n}'
+
   if (exportHelper) {
     declration += '\nexport {}'
   }

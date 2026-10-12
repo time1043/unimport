@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import { expect, test } from 'vitest'
 import { createUnimport } from '../src'
 
@@ -41,7 +40,23 @@ test('dts', () => {
         const useState: typeof import('react')['useState']
         const useEffect: typeof import('react')['useEffect']
         const useRef: typeof import('react')['useRef']
-        const \$: typeof import('jquery')['\$']
+        const $: typeof import('jquery')['$']
+      }
+      // for vue template auto import
+      declare module 'vue' {
+        interface ComponentCustomProperties {
+          readonly customDefault: typeof import('default')['default']
+          readonly foobar: typeof import('foobar')['foobar']
+          readonly ref: typeof import('vue')['ref']
+          readonly reactive: typeof import('vue')['reactive']
+          readonly computed: typeof import('vue')['computed']
+          readonly toRefs: typeof import('vue')['toRefs']
+          readonly THREE: typeof import('three')
+          readonly useState: typeof import('react')['useState']
+          readonly useEffect: typeof import('react')['useEffect']
+          readonly useRef: typeof import('react')['useRef']
+          readonly $: typeof import('jquery')['$']
+        }
       }
       export {}"
     `)

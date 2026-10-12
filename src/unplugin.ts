@@ -30,7 +30,7 @@ export default createUnplugin<Partial<UnimportPluginOptions>>((options) => {
       return filter(id)
     },
     async transform (_code, id) {
-      if (id.endsWith('.vue')) {
+      if (id.endsWith('.vue') || id.includes('.vue?vue')) {
         _code = vueTemplateAutoImport(_code, ctx)
       }
 
