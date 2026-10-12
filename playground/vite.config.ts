@@ -18,7 +18,8 @@ export default defineConfig({
       ],
       dirs: [
         'src/composables'
-      ]
+      ],
+      vueTemplate: true
     })
   ],
   resolve: {
