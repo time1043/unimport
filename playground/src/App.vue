@@ -6,11 +6,13 @@ function inc() {
 }
 
 const double = useDoubled(count);
+const a = multiplier;
+// const a = 2;
 </script>
 
 <template>
   <div>
-    <h1>{{ count }} x 2 = {{ double }}</h1>
+    <h1>{{ count }} x {{ a }} = {{ double }}</h1>
     <button @click="inc">Increment</button>
   </div>
 </template>

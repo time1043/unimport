@@ -46,6 +46,7 @@ declare global {
   const onRenderTriggered: typeof import('vue')['onRenderTriggered']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const useCssVars: typeof import('vue')['useCssVars']
+  const multiplier: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index.ts')['multiplier']
   const useDoubled: typeof import('C:/Users/28180/Documents/code3/base/web/unimport/playground/src/composables/index.ts')['useDoubled']
 }
 export {}
